@@ -1065,6 +1065,8 @@ app.title = 'Rising - Spark A.I.'
 auth = dash_auth.BasicAuth(app, VALID_USERNAME_PASSWORD_PAIRS)
 app.config.suppress_callback_exceptions = True
 app.layout = html.Div([
+    dcc.Interval(id = 'update_timer', interval=3600000),
+    html.Div(None, id = 'task_state', hidden=True),
     dcc.Location(id = 'url', refresh = False),
     call_layout_header(),
     html.Div(style = {'background-color': 'black', 'margin-top': '1%', 'height': '7px', 'border-radius': '6px'}),
@@ -1081,13 +1083,7 @@ server = app.server
 #|____CALLBACKS____________________________________
 # href page layouts
 @app.callback(
-    [Output('link_home', 'style'),
-    Output('link_subject_analysis', 'style'),
-    Output('link_portfolio', 'style'),
-    Output('link_market_risk', 'style'),
-    Output('link_other_links', 'style'),
-    Output('page_layout', 'children'),
-    Output('page_switch_loading', 'children')],
+    [Output('task_state', 'children')],
     [Input('url', 'pathname')]
 )
 def display_page_layout(pathname):
@@ -1114,9 +1110,26 @@ def display_page_layout(pathname):
     #     link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style = origin_style, origin_style, origin_style, origin_style
     #     layout = layout_home
     # return link_home_style, link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style, layout, None
+
     result = q.enqueue(layout_router, pathname).result
+
     print(result)
-    return result
+    return [result]
+
+@app.callback([Output('link_home', 'style'),
+    Output('link_subject_analysis', 'style'),
+    Output('link_portfolio', 'style'),
+    Output('link_market_risk', 'style'),
+    Output('link_other_links', 'style'),
+    Output('page_layout', 'children'),
+    Output('page_switch_loading', 'children')],
+    [Input('update_timer', 'n_intervals')],
+    [State('task_state', 'children')])
+def layout_subscriber(update_timer, task_state):
+    if task_state != None:
+        return task_state
+    else:
+        return []
 # homepage future predictions popover button → future predictions popover
 @app.callback(
     Output('fd_close_popover', 'is_open'),
