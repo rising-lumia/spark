@@ -1127,9 +1127,12 @@ def display_page_layout(pathname):
     [Input('update_timer', 'n_intervals')],
     [State('task_state', 'children')])
 def layout_subscriber(update_timer, task_state):
-    if job.result is not None:
-        print("ok", task_state)
-        return task_state.result
+    if task_state =='waiting':
+        if job.result is not None:
+            print("ok", task_state)
+            return task_state.result
+        else:
+            return [None, None, None, None, None, None, None]
     else:
         return [None, None, None, None, None, None, None]
 # homepage future predictions popover button → future predictions popover
