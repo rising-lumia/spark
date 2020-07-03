@@ -1046,7 +1046,6 @@ app = dash.Dash(
 
 # create RQ queue
 q = Queue(connection=conn)
-job = None
 # all layouts
 layout_home = call_layout_home()
 layout_subject_analysis = call_layout_subject_analysis()
@@ -1130,7 +1129,7 @@ def display_page_layout(pathname):
     [State('task_state', 'children')])
 def layout_subscriber(update_timer, task_state):
     if task_state is not None:
-        job = Job.fetch(task_state)
+        job = Job.fetch(task_state, connection=conn)
         if job.get_status() == 'finished':
             print("ok", job.result)
             return job.result
