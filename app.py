@@ -1044,6 +1044,7 @@ app = dash.Dash(
 
 # create RQ queue
 q = Queue(connection=conn)
+job = None
 # all layouts
 layout_home = call_layout_home()
 layout_subject_analysis = call_layout_subject_analysis()
@@ -1113,8 +1114,7 @@ def display_page_layout(pathname):
 
     job = q.enqueue(layout_router, pathname)
 
-    print(job.result)
-    return job
+    return "waiting"
 
 @app.callback(
     [Output('link_home', 'style'),
@@ -1127,9 +1127,7 @@ def display_page_layout(pathname):
     [Input('update_timer', 'n_intervals')],
     [State('task_state', 'children')])
 def layout_subscriber(update_timer, task_state):
-    if task_state is None:
-        return[None, None, None, None, None, None, None]
-    if task_state.result != None:
+    if job.result is not None:
         print("ok", task_state)
         return task_state.result
     else:
