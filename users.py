@@ -1,0 +1,3 @@
+VALID_USERNAME_PASSWORD_PAIRS = {
+    'rising': '83737759'
+}
