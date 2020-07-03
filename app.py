@@ -1065,7 +1065,7 @@ app.title = 'Rising - Spark A.I.'
 auth = dash_auth.BasicAuth(app, VALID_USERNAME_PASSWORD_PAIRS)
 app.config.suppress_callback_exceptions = True
 app.layout = html.Div([
-    dcc.Interval(id = 'update_timer', interval=3600000),
+    dcc.Interval(id = 'update_timer', interval=1000),
     html.Div(None, id = 'task_state', hidden=True),
     dcc.Location(id = 'url', refresh = False),
     call_layout_header(),
@@ -1116,7 +1116,8 @@ def display_page_layout(pathname):
     print(result)
     return [result]
 
-@app.callback([Output('link_home', 'style'),
+@app.callback(
+    [Output('link_home', 'style'),
     Output('link_subject_analysis', 'style'),
     Output('link_portfolio', 'style'),
     Output('link_market_risk', 'style'),
@@ -1126,8 +1127,8 @@ def display_page_layout(pathname):
     [Input('update_timer', 'n_intervals')],
     [State('task_state', 'children')])
 def layout_subscriber(update_timer, task_state):
-    print(task_state)
     if task_state != None:
+        print("ok", task_state)
         return task_state
     else:
         return []
