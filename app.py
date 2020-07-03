@@ -46,7 +46,9 @@ def layout_router(pathname):
         link_home_style = current_style
         link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style = origin_style, origin_style, origin_style, origin_style
         layout = layout_home
-    return link_home_style, link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style, layout, None
+    print("ok")
+    print(link_home_style, link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style, layout, None)
+    return [link_home_style, link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style, layout, None]
 
 ##-----------------------------
 
