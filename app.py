@@ -1068,7 +1068,7 @@ auth = dash_auth.BasicAuth(app, VALID_USERNAME_PASSWORD_PAIRS)
 app.config.suppress_callback_exceptions = True
 app.layout = html.Div([
     dcc.Interval(id = 'update_timer', interval=1000),
-    html.Div(None, id = 'task_state', hidden=True),
+    html.Div(None, id = 'task_state'),
     dcc.Location(id = 'url', refresh = False),
     call_layout_header(),
     html.Div(style = {'background-color': 'black', 'margin-top': '1%', 'height': '7px', 'border-radius': '6px'}),
@@ -1116,7 +1116,7 @@ def display_page_layout(pathname):
     job = q.enqueue(layout_router, pathname)
 
     print(job.result)
-    return [job.result]
+    return job.result
 
 @app.callback(
     [Output('link_home', 'style'),
