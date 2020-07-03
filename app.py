@@ -1114,6 +1114,8 @@ def display_page_layout(pathname):
     #     link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style = origin_style, origin_style, origin_style, origin_style
     #     layout = layout_home
     # return link_home_style, link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style, layout, None
+    result = q.enqueue(layout_router, pathname)
+    print(result)
     return q.enqueue(layout_router, pathname)
 # homepage future predictions popover button → future predictions popover
 @app.callback(
