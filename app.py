@@ -1083,7 +1083,7 @@ server = app.server
 #|____CALLBACKS____________________________________
 # href page layouts
 @app.callback(
-    [Output('task_state', 'children')],
+    Output('task_state', 'children'),
     [Input('url', 'pathname')]
 )
 def display_page_layout(pathname):
