@@ -1127,6 +1127,8 @@ def display_page_layout(pathname):
     [Input('update_timer', 'n_intervals')],
     [State('task_state', 'children')])
 def layout_subscriber(update_timer, task_state):
+    if task_state is None:
+        return[None, None, None, None, None, None, None]
     if task_state.result != None:
         print("ok", task_state)
         return task_state.result
