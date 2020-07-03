@@ -46,8 +46,6 @@ def layout_router(pathname):
         link_home_style = current_style
         link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style = origin_style, origin_style, origin_style, origin_style
         layout = layout_home
-    print("ok")
-    print(link_home_style, link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style, layout, None)
     return [link_home_style, link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style, layout, None]
 
 ##-----------------------------
@@ -1068,7 +1066,7 @@ auth = dash_auth.BasicAuth(app, VALID_USERNAME_PASSWORD_PAIRS)
 app.config.suppress_callback_exceptions = True
 app.layout = html.Div([
     dcc.Interval(id = 'update_timer', interval=1000),
-    html.Div(None, id = 'task_state'),
+    html.Div(children=None, id = 'task_state'),
     dcc.Location(id = 'url', refresh = False),
     call_layout_header(),
     html.Div(style = {'background-color': 'black', 'margin-top': '1%', 'height': '7px', 'border-radius': '6px'}),
@@ -1116,7 +1114,7 @@ def display_page_layout(pathname):
     job = q.enqueue(layout_router, pathname)
 
     print(job.result)
-    return job.result
+    return job
 
 @app.callback(
     [Output('link_home', 'style'),
@@ -1129,11 +1127,11 @@ def display_page_layout(pathname):
     [Input('update_timer', 'n_intervals')],
     [State('task_state', 'children')])
 def layout_subscriber(update_timer, task_state):
-    if task_state != None:
+    if task_state.result != None:
         print("ok", task_state)
-        return task_state
+        return task_state.result
     else:
-        return [None, None,None,None,None,None,None]
+        return [None, None, None, None, None, None, None]
 # homepage future predictions popover button → future predictions popover
 @app.callback(
     Output('fd_close_popover', 'is_open'),
