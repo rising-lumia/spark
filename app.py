@@ -1111,10 +1111,10 @@ def display_page_layout(pathname):
     #     layout = layout_home
     # return link_home_style, link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style, layout, None
 
-    result = q.enqueue(layout_router, pathname).result
+    job = q.enqueue(layout_router, pathname)
 
-    print(result)
-    return [result]
+    print(job.result)
+    return [job.result]
 
 @app.callback(
     [Output('link_home', 'style'),
@@ -1131,7 +1131,7 @@ def layout_subscriber(update_timer, task_state):
         print("ok", task_state)
         return task_state
     else:
-        return []
+        return [None, None,None,None,None,None,None]
 # homepage future predictions popover button → future predictions popover
 @app.callback(
     Output('fd_close_popover', 'is_open'),
