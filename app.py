@@ -1059,30 +1059,31 @@ server = app.server
     [Input('url', 'pathname')]
 )
 def display_page_layout(pathname):
-    current_style = {'background-color': 'black', 'margin-right': '12px', 'font-weight': 'bold', 'color': 'white', 'font-family': 'Microsoft JhengHei', 'font-size': '18px', 'border-radius': '28px'}
-    origin_style = {'background-color': 'white', 'margin-right': '12px', 'font-weight': 'bold', 'color': 'black', 'font-family': 'Microsoft JhengHei', 'font-size': '18px', 'border-radius': '28px'}
-    if pathname == '/subject_analysis':
-        link_subject_analysis_style = current_style
-        link_home_style, link_portfolio_style, link_market_risk_style, link_other_links_style = origin_style, origin_style, origin_style, origin_style
-        layout = layout_subject_analysis
-    elif pathname == '/portfolio':
-        link_portfolio_style = current_style
-        link_home_style, link_subject_analysis_style, link_market_risk_style, link_other_links_style = origin_style, origin_style, origin_style, origin_style
-        layout = layout_portfolio
-    elif pathname == '/market_risk':
-        link_market_risk_style = current_style
-        link_home_style, link_portfolio_style, link_subject_analysis_style, link_other_links_style = origin_style, origin_style, origin_style, origin_style
-        layout = layout_market_risk
-    elif pathname == '/other_links':
-        link_other_links_style = current_style
-        link_home_style, link_portfolio_style, link_market_risk_style, link_subject_analysis_style = origin_style, origin_style, origin_style, origin_style
-        layout = layout_other_links
-    else:
-        link_home_style = current_style
-        link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style = origin_style, origin_style, origin_style, origin_style
-        layout = layout_home
-    return link_home_style, link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style, layout, None
-
+    def display_router(pathname):
+        current_style = {'background-color': 'black', 'margin-right': '12px', 'font-weight': 'bold', 'color': 'white', 'font-family': 'Microsoft JhengHei', 'font-size': '18px', 'border-radius': '28px'}
+        origin_style = {'background-color': 'white', 'margin-right': '12px', 'font-weight': 'bold', 'color': 'black', 'font-family': 'Microsoft JhengHei', 'font-size': '18px', 'border-radius': '28px'}
+        if pathname == '/subject_analysis':
+            link_subject_analysis_style = current_style
+            link_home_style, link_portfolio_style, link_market_risk_style, link_other_links_style = origin_style, origin_style, origin_style, origin_style
+            layout = layout_subject_analysis
+        elif pathname == '/portfolio':
+            link_portfolio_style = current_style
+            link_home_style, link_subject_analysis_style, link_market_risk_style, link_other_links_style = origin_style, origin_style, origin_style, origin_style
+            layout = layout_portfolio
+        elif pathname == '/market_risk':
+            link_market_risk_style = current_style
+            link_home_style, link_portfolio_style, link_subject_analysis_style, link_other_links_style = origin_style, origin_style, origin_style, origin_style
+            layout = layout_market_risk
+        elif pathname == '/other_links':
+            link_other_links_style = current_style
+            link_home_style, link_portfolio_style, link_market_risk_style, link_subject_analysis_style = origin_style, origin_style, origin_style, origin_style
+            layout = layout_other_links
+        else:
+            link_home_style = current_style
+            link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style = origin_style, origin_style, origin_style, origin_style
+            layout = layout_home
+        return link_home_style, link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style, layout, None
+    return q.enqueue(display_router, 'http://heroku.com')
 # homepage future predictions popover button → future predictions popover
 @app.callback(
     Output('fd_close_popover', 'is_open'),
