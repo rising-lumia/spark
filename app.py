@@ -17,10 +17,12 @@ import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 import sqlalchemy
 from rq import Queue
+from rq.job import Job
 from worker import conn
 from settings import *
 from users import *
 from startup import *
+
 
 #redis test
 def layout_router(pathname):
@@ -1112,9 +1114,9 @@ def display_page_layout(pathname):
     #     layout = layout_home
     # return link_home_style, link_subject_analysis_style, link_portfolio_style, link_market_risk_style, link_other_links_style, layout, None
 
-    job = q.enqueue(layout_router, pathname)
+    job_id = q.enqueue(layout_router, pathname).id
 
-    return "waiting"
+    return job_id
 
 @app.callback(
     [Output('link_home', 'style'),
@@ -1127,10 +1129,11 @@ def display_page_layout(pathname):
     [Input('update_timer', 'n_intervals')],
     [State('task_state', 'children')])
 def layout_subscriber(update_timer, task_state):
-    if task_state =='waiting':
-        if job.result is not None:
-            print("ok", task_state)
-            return task_state.result
+    if task_state is not None:
+        job = Job.fetch(task_state)
+        if job.get_status() == 'finished':
+            print("ok", job.result)
+            return job.result
         else:
             return [None, None, None, None, None, None, None]
     else:
